@@ -65,9 +65,6 @@ class TopicsController extends Controller
 
 		return redirect()->route('topics.index')->with('message', 'Deleted successfully.');
 	}
-
-
-
 	//多图上传
 	  public function uploadImage(Request $request, ImageUploadHandler $uploader)
     {
