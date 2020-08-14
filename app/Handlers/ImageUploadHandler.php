@@ -2,18 +2,18 @@
 
 namespace App\Handlers;
 
-use  Illuminate\Support\Str;
 use Image;
+use Str;
+
 class ImageUploadHandler
 {
-    // 只允许以下后缀名的图片文件上传
     protected $allowed_ext = ["png", "jpg", "gif", 'jpeg'];
 
-    public function save($file, $folder, $file_prefix)
+    public function save($file, $folder, $file_prefix, $max_width = false)
     {
         // 获取文件的后缀名，因图片从剪贴板里黏贴时后缀名为空，所以此处确保后缀一直存在
         $extension = strtolower($file->getClientOriginalExtension()) ?: 'png';
-         // 如果上传的不是图片将终止操作
+        // 如果上传的不是图片将终止操作
         if ( ! in_array($extension, $this->allowed_ext)) {
             return false;
         }
@@ -26,16 +26,17 @@ class ImageUploadHandler
         $upload_path = public_path() . '/' . $folder_name;
 
       
-        // 拼接文件名，加前缀是为了增加辨析度，前缀可以是相关数据模型的 ID 
+
+        // 拼接文件名，加前缀是为了增加辨析度，前缀可以是相关数据模型的 ID
         // 值如：1_1493521050_7BVc9v9ujP.png
         $filename = $file_prefix . '_' . time() . '_' . Str::random(10) . '.' . $extension;
 
-       
+        
 
         // 将图片移动到我们的目标存储路径中
         $file->move($upload_path, $filename);
 
-         // 如果限制了图片宽度，就进行裁剪
+        // 如果限制了图片宽度，就进行裁剪
         if ($max_width && $extension != 'gif') {
 
             // 此类中封装的函数，用于裁剪图片
@@ -46,8 +47,8 @@ class ImageUploadHandler
             'path' => config('app.url') . "/$folder_name/$filename"
         ];
     }
-    
-     public function reduceSize($file_path, $max_width)
+
+    public function reduceSize($file_path, $max_width)
     {
         // 先实例化，传参是文件的磁盘物理路径
         $image = Image::make($file_path);

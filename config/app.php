@@ -166,6 +166,7 @@ return [
          * Package Service Providers...
          */
         Mews\Captcha\CaptchaServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -229,6 +230,7 @@ return [
 
         //packagist
          'Captcha' => Mews\Captcha\Facades\Captcha::class,
+         'Image' => Intervention\Image\ImageServiceProvider::class,
     ],
 
 ];
