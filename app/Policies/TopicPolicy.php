@@ -25,4 +25,8 @@ class TopicPolicy extends Policy
     {
         return $user->isAuthorOf($topic);
     }
+    public function destroy(User $user, Reply $reply)
+    {
+        return $user->isAuthorOf($reply) || $user->isAuthorOf($reply->topic);
+    }
 }
